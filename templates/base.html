@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/theme/{{ user.blog.theme }}">
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <script src="/static/js/jQuery.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="/static/css/article_detail.css">
+    <link rel="icon" href="//www.jd.com/favicon.ico" mce_href="//www.jd.com/favicon.ico" type="image/x-icon">
+
+    <title>个人站点</title>
+
+</head>
+<body>
+
+<div class="header">
+    <p class="title">{{ blog.title }}</p>
+  <span class="pull-right">  <a href="/head/">返回首页</a></span>
+    <span class="pull-right">当前登录人<label for="">{{ request.user.username }}</label></span>
+</div>
+
+
+{#分类,标签#}
+<div class="container-fluid left_region">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">文章分类</h3>
+                </div>
+
+
+
+                {% for category in category_list %}
+{#                    获取博客分类#}
+                    <a href='/homesite/{{ user.username }}/category/{{ category.0}}/'><div class="panel-body">
+                       {{category.0 }}({{ category.1 }})
+                    </div></a>
+                {% endfor %}
+
+
+            </div>
+
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h3 class="panel-title">标签分类</h3>
+                </div>
+
+                {% for tag in tag_list %}
+{#                    获取博客分类#}
+                    <a href="/homesite/{{ username }}/tag/{{ tag.0}}/"><div class="panel-body">
+                       {{tag.0  }}({{ tag.1 }})
+                    </div></a>
+                {% endfor %}
+            </div>
+        </div>
+
+       {% block content %}
+
+        {% endblock %}
+
+
+
+    </div>
+</div>
+</body>
+</html>
