@@ -1,8 +1,9 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,HttpResponse
 from blog.models import UserInfo,Article,ArticleUpDown,Category,Tag,Article2Tag,Comment
 from django.contrib import auth
 from django.db.models import Count,Max,Min,F
 from django.http import JsonResponse
+from tools.code import check_code
 
 # Create your views here.
 
@@ -11,17 +12,36 @@ def login(request):
     if request.method == 'POST':
         user = request.POST.get('user')
         pwd = request.POST.get('pwd')
+        check_code = request.POST.get('check_code')
+        code = request.session.get('code')
+        if check_code.upper() != code.upper():
+            msg = '验证码输入错误'
+            return render(request,'login.html',{'msg':msg})
         user = auth.authenticate(username=user,password=pwd)
         if user:
             auth.login(request,user)
             return redirect('/head/')
-
+        msg = '用户名或密码错误'
+        return render(request,'login.html',{'msg':msg})
     return render(request,'login.html')
 
 def head(request):
     article_list = Article.objects.all()
     return render(request,'head.html',{'article_list':article_list})
 
+def code(request):
+    """
+    生成图片验证码
+    :param request:
+    :return:
+    """
+
+    img,code = check_code()
+    request.session['code'] = code
+    from io import BytesIO
+    stream = BytesIO()
+    img.save(stream,'png')
+    return HttpResponse(stream.getvalue())
 
 def logout(request):
     auth.logout(request)

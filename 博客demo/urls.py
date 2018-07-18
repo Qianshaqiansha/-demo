@@ -26,7 +26,8 @@ urlpatterns = [
     path('logout/',views.logout),
     path('up/',views.up),
     path('comment/',views.comment),
-    
+    path('code/',views.code),
+
     path('backend/',views.backend),
     path('add_article/',views.add_article),
     re_path('homesite/(?P<username>\w+)/',views.homesite),
